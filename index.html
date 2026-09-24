@@ -13,29 +13,59 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-       <!-- 🔥 Cinematic Loader -->
-    <div id="loader" class="loader-overlay">
-        <div class="loader-content">
-            <div class="loader-logo">
-                <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="loaderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#7C3AED"/>
-                            <stop offset="100%" stop-color="#EC4899"/>
-                        </linearGradient>
-                    </defs>
-                    <circle cx="80" cy="80" r="62" stroke="url(#loaderGrad)" stroke-width="3" fill="none" stroke-dasharray="4 8" opacity="0.7"/>
-                    <path d="M 42 105 L 42 55 L 62 80 L 80 55 L 80 105" stroke="url(#loaderGrad)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                    <path d="M 96 55 L 96 105 M 96 55 L 124 55 M 96 78 L 118 78" stroke="url(#loaderGrad)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                </svg>
-            </div>
-            <p class="loader-title">MIND FORGE</p>
-            <div class="loader-bar">
-                <div class="loader-fill" id="loader-fill"></div>
-            </div>
-            <p class="loader-percent" id="loader-percent">0%</p>
+ <!-- شاشة التحميل -->
+<div id="cinematic-loader" class="cinematic-loader">
+    <div class="loader-content">
+        <div class="loader-logo-wrap">
+            <svg class="loader-logo" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="loaderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#7C3AED"/>
+                        <stop offset="100%" stop-color="#EC4899"/>
+                    </linearGradient>
+                    <linearGradient id="loaderRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.8"/>
+                        <stop offset="100%" stop-color="#EC4899" stop-opacity="0.8"/>
+                    </linearGradient>
+                </defs>
+
+                <circle cx="80" cy="80" r="62" stroke="url(#loaderRingGrad)" stroke-width="2.5" fill="none" stroke-dasharray="4 8"/>
+                <circle cx="80" cy="80" r="72" stroke="url(#loaderRingGrad)" stroke-width="1" fill="none" opacity="0.3"/>
+
+                <path d="M 42 105 L 42 55 L 62 80 L 80 55 L 80 105" stroke="url(#loaderGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <path d="M 96 55 L 96 105 M 96 55 L 124 55 M 96 78 L 118 78" stroke="url(#loaderGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
         </div>
+
+        <h1 class="loader-title">MIND FORGE</h1>
+
+        <div class="loader-progress-bar">
+            <div class="loader-progress-fill" id="loader-progress-fill"></div>
+        </div>
+
+        <p class="loader-percent" id="loader-percent">0%</p>
     </div>
+</div>
+    <!-- ============================================
+         زر تبديل الوضع
+         ============================================ -->
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" type="button" aria-label="تبديل الوضع">
+        <svg class="theme-icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="theme-icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
     <!-- ============================================
          1. الواجهة الرئيسية
          ============================================ -->
@@ -55,72 +85,106 @@
                             <stop offset="100%" stop-color="#EC4899" stop-opacity="0.6"/>
                         </linearGradient>
                     </defs>
-
                     <circle cx="80" cy="80" r="62" stroke="url(#gradRing)" stroke-width="3" fill="none" stroke-dasharray="4 8" opacity="0.7"/>
                     <circle cx="80" cy="80" r="72" stroke="url(#gradRing)" stroke-width="1.5" fill="none" opacity="0.35"/>
                     <circle cx="80" cy="18" r="4" fill="#7C3AED"/>
                     <circle cx="142" cy="80" r="4" fill="#EC4899"/>
                     <circle cx="80" cy="142" r="4" fill="#7C3AED"/>
                     <circle cx="18" cy="80" r="4" fill="#EC4899"/>
-
                     <path d="M 42 105 L 42 55 L 62 80 L 80 55 L 80 105" stroke="url(#gradMF)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                     <path d="M 96 55 L 96 105 M 96 55 L 124 55 M 96 78 L 118 78" stroke="url(#gradMF)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                 </svg>
             </div>
-
             <div class="brand-text">
                 <h1 class="brand-title">درب عقلك</h1>
                 <p class="brand-subtitle">MIND FORGE</p>
             </div>
         </div>
 
-        <!-- ⭐ الترحيب الديناميكي (جديد) -->
+        <!-- الترحيب الديناميكي -->
         <p class="welcome-message" id="welcome-message"></p>
+
+        <!-- شريط الفوائد المتحرك -->
+        <div class="benefits-ticker">
+            <div class="benefits-track">
+                <span class="benefit-item">🧠 تقوية الذاكرة</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">⚡ سرعة البديهة</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">🎯 تركيز أعلى</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">👁️ إدراك بصري</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">🔄 مرونة ذهنية</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">📊 إحصائيات دقيقة</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">🧠 تقوية الذاكرة</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">⚡ سرعة البديهة</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">🎯 تركيز أعلى</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">👁️ إدراك بصري</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">🔄 مرونة ذهنية</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">📊 إحصائيات دقيقة</span>
+                <span class="benefit-sep">•</span>
+            </div>
+        </div>
 
         <!-- اختيار الفئة -->
         <h2 class="section-title">اختر الفئة العمرية</h2>
 
         <div class="age-cards">
-            <button class="age-card" onclick="selectAge('over16')" type="button">
-                <span class="age-card-top">فوق</span>
-                <span class="age-card-num">16</span>
-                <span class="age-card-bot">سنة</span>
-            </button>
+    <button class="age-card" onclick="selectAge('under16')" type="button">
+        <div class="age-card-icon">🌱</div>
+        <h3 class="age-card-title">مرحلة البداية</h3>
+        <p class="age-card-desc">لعبة تنموية</p>
+        <p class="age-card-sub">لعمر أقل من 16 سنة</p>
+        <span class="age-card-btn">ابدأ المرحلة</span>
+    </button>
 
-            <button class="age-card" onclick="selectAge('under16')" type="button">
-                <span class="age-card-top">تحت</span>
-                <span class="age-card-num">16</span>
-                <span class="age-card-bot">سنة</span>
-            </button>
-        </div>
-
-       
+    <button class="age-card" onclick="selectAge('over16')" type="button">
+        <div class="age-card-icon">🔥</div>
+        <h3 class="age-card-title">مرحلة التحدي</h3>
+        <p class="age-card-desc">لعبة متقدمة</p>
+        <p class="age-card-sub">لعمر فوق 16 سنة</p>
+        <span class="age-card-btn">ابدأ المرحلة</span>
+    </button>
+</div>
         <!-- لوحة الإحصائيات -->
         <div class="stats-board">
-            <h3 class="stats-title">مجموعك الكلي</h3>
+            <h3 class="stats-title">📊 مجموعك</h3>
+
             <div class="stats-score">
                 <span class="stats-current" id="stats-current">0</span>
-                <span class="stats-divider">/</span>
-                <span class="stats-total" id="stats-total">0</span>
+                <span class="stats-score-label">نقطة</span>
             </div>
+
             <div class="stats-bar">
                 <div class="stats-bar-fill" id="stats-bar-fill"></div>
             </div>
-            <p class="stats-percent" id="stats-percent">0%</p>
+
+            <div class="stats-percent-row">
+                <span class="stats-percent" id="stats-percent">0%</span>
+                <span class="stats-games-count" id="stats-games-count">لعبت 0 من 0</span>
+            </div>
 
             <div class="stats-bottom">
                 <div class="stats-item">
-                    <span class="stats-label">أعلى لعبة</span>
+                    <span class="stats-label">🏆 أعلى لعبة</span>
                     <span class="stats-value" id="stats-best">—</span>
                 </div>
                 <div class="stats-item">
-                    <span class="stats-label">أقل لعبة</span>
+                    <span class="stats-label">🎯 أقل لعبة</span>
                     <span class="stats-value" id="stats-worst">—</span>
                 </div>
             </div>
         </div>
 
-        <!-- ⭐ الشريط السفلي (جديد) -->
+        <!-- الشريط السفلي -->
         <footer class="footer">
             <div class="footer-content">
                 <div class="footer-social">
@@ -157,8 +221,6 @@
                 الرئيسية
             </button>
         </div>
-
-        <!-- شريط القسم — يُضاف تلقائياً من JavaScript -->
 
         <p class="games-intro">اختر التحدي الإدراكي</p>
         <p class="games-desc">كل لعبة مصممة لتقوية مهارة ذهنية محددة</p>
