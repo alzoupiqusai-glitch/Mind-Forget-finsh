@@ -3523,6 +3523,10 @@ function animateCounter(elementId, targetValue, duration = 1500) {
 }
 
 /* تحديث العدّاد في الإحصائيات */
+/* ============================================================
+   📊 الإحصائيات الجديدة — v2.0
+   حساب النسبة على أساس الألعاب المفعّلة
+   ============================================================ */
 function updateStatsWithCounter() {
     const stats = getStats();
     const active = currentAgeGroup
@@ -3530,18 +3534,30 @@ function updateStatsWithCounter() {
         : GAMES;
 
     let total = 0;
+    let playedCount = 0;
+    let best = -1, bestName = '—';
+    let worst = 101, worstName = '—';
+
     active.forEach(g => {
-        if (stats[g.key] !== undefined) total += stats[g.key];
+        const s = stats[g.key];
+        if (s !== undefined) {
+            total += s;
+            playedCount++;
+            if (s > best) { best = s; bestName = g.title; }
+            if (s < worst) { worst = s; worstName = g.title; }
+        }
     });
 
-    const percent = active.length > 0
-        ? Math.round((total / (active.length * 100)) * 100)
+    // ⭐ النسبة = على أساس الألعاب المفعّلة
+    const maxForPlayed = playedCount * 100;
+    const percent = playedCount > 0
+        ? Math.round((total / maxForPlayed) * 100)
         : 0;
 
-    // عدّاد الرقم
+    // ⭐ عدّاد الرقم
     animateCounter('stats-current', total, 1200);
 
-    // عدّاد النسبة
+    // ⭐ عدّاد النسبة
     const percentEl = document.getElementById('stats-percent');
     if (percentEl) {
         const pStart = performance.now();
@@ -3558,7 +3574,7 @@ function updateStatsWithCounter() {
         requestAnimationFrame(updatePercent);
     }
 
-    // شريط التقدم
+    // ⭐ شريط التقدم
     const fill = document.getElementById('stats-bar-fill');
     if (fill) {
         fill.style.width = '0%';
@@ -3567,26 +3583,29 @@ function updateStatsWithCounter() {
         }, 100);
     }
 
-    // باقي الإحصائيات (بدون عدّاد)
-    const maxTotal = active.length * 100;
+    // ⭐ عدد الألعاب
+    const gamesCountEl = document.getElementById('stats-games-count');
+    if (gamesCountEl) {
+        gamesCountEl.innerText = `لعبت ${playedCount} من ${active.length}`;
+    }
+
+    // ⭐ أعلى وأقل لعبة
     const $ = id => document.getElementById(id);
-    if ($('stats-total')) $('stats-total').innerText = maxTotal;
-
-    let playedCount = 0, best = -1, bestName = '—', worst = 101, worstName = '—';
-    active.forEach(g => {
-        const s = stats[g.key];
-        if (s !== undefined) {
-            playedCount++;
-            if (s > best) { best = s; bestName = g.title; }
-            if (s < worst) { worst = s; worstName = g.title; }
-        }
-    });
-
-    if ($('stats-best')) $('stats-best').innerText = playedCount > 0 ? `${bestName} — ${best}` : '—';
-    if ($('stats-worst')) $('stats-worst').innerText = playedCount > 0 ? `${worstName} — ${worst}` : '—';
+    if ($('stats-best')) {
+        $('stats-best').innerText = playedCount > 0
+            ? `${bestName} — ${best}`
+            : '—';
+    }
+    if ($('stats-worst')) {
+        $('stats-worst').innerText = playedCount > 0
+            ? `${worstName} — ${worst}`
+            : '—';
+    }
 }
-
 /* ═══ 3. شريط القسم (فوق 16 / تحت 16) ═══ */
+/* ============================================================
+   🎯 شريط القسم — النسخة الجديدة
+   ============================================================ */
 function renderSectionBanner() {
     const gamesScreen = document.getElementById('games-screen');
     if (!gamesScreen) return;
@@ -3601,15 +3620,15 @@ function renderSectionBanner() {
 
     if (isOver16) {
         banner.innerHTML = `
-            <span class="banner-icon">🎯</span>
-            <span class="banner-title">أنت في قسم فوق 16 سنة</span>
-            <span class="banner-subtitle">أعلى مستوى تحدي — هل أنت جاهز؟ 🔥</span>
+            <span class="banner-icon">🔥</span>
+            <span class="banner-title">مرحلة التحدي</span>
+            <span class="banner-subtitle">أعلى مستوى صعوبة — هل أنت جاهز؟ 💪</span>
         `;
     } else {
         banner.innerHTML = `
             <span class="banner-icon">🌱</span>
-            <span class="banner-title">أنت في قسم تحت 16 سنة</span>
-            <span class="banner-subtitle">مستوى تنموي ذكي — لنبدأ رحلة التعلم! ✨</span>
+            <span class="banner-title">مرحلة البداية</span>
+            <span class="banner-subtitle">لنبدأ رحلة التعلم خطوة بخطوة ✨</span>
         `;
     }
 
@@ -3807,3 +3826,67 @@ console.log('%c✨ الإضافات القوية محمّلة!', 'color:#EC4899;
 console.log('%c✅ Cinematic Loader', 'color:#10B981;font-weight:bold;');
 console.log('%c✅ 3D Card Tilt', 'color:#10B981;font-weight:bold;');
 console.log('%c✅ Color Shifting Title', 'color:#10B981;font-weight:bold;');
+/* ============================================================
+   🌙 تبديل الوضع (فاتح / داكن)
+   ============================================================ */
+function toggleTheme() {
+    const root = document.documentElement;
+
+    if (root.classList.contains('dark-mode')) {
+        root.classList.remove('dark-mode');
+        try { localStorage.setItem('mindforge-theme', 'light'); } catch (e) {}
+    } else {
+        root.classList.add('dark-mode');
+        try { localStorage.setItem('mindforge-theme', 'dark'); } catch (e) {}
+    }
+}
+
+/* ═══ استرجاع الوضع عند تحميل الصفحة ═══ */
+(function initTheme() {
+    try {
+        const saved = localStorage.getItem('mindforge-theme');
+        if (saved === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    } catch (e) {}
+})();
+
+console.log('%c🌙 نظام تبديل الوضع محمّل', 'color:#0047AB;font-weight:bold;');
+/* ============================================================
+   🎬 شاشة التحميل السينمائية — v2.0
+   ============================================================ */
+(function runCinematicLoader() {
+    const loader = document.getElementById('cinematic-loader');
+    const fill = document.getElementById('loader-progress-fill');
+    const percentEl = document.getElementById('loader-percent');
+
+    if (!loader || !fill || !percentEl) return;
+
+    let progress = 0;
+    const duration = 3500; // 3.5 ثانية
+    const interval = 30;
+    const step = 100 / (duration / interval);
+
+    const timer = setInterval(() => {
+        progress += step;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(timer);
+
+            // بعد ما توصل 100%
+            setTimeout(() => {
+                loader.classList.add('hidden');
+
+                // نحذف من DOM
+                setTimeout(() => {
+                    loader.remove();
+                }, 900);
+            }, 400);
+        }
+
+        fill.style.width = progress + '%';
+        percentEl.innerText = Math.floor(progress) + '%';
+    }, interval);
+})();
+
+console.log('%c🎬 Cinematic Loader v2.0 محمّل', 'color:#EC4899;font-weight:bold;');
